@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block title %}Erreur interne{% endblock title %}
+
+{% block content %}
+  <h1>Erreur interne (500)</h1>
+  <p>Une erreur interne est survenue.</p>
+  <a href="{% url 'index' %}">Retour à l’accueil</a>
+{% endblock %}
