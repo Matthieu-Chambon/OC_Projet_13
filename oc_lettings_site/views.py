@@ -8,4 +8,13 @@ from django.shortcuts import render
 # Aliquam vitae erat ac orci placerat luctus. Nullam elementum urna nisi, pellentesque iaculis
 # enim cursus in. Praesent volutpat porttitor magna, non finibus neque cursus id.
 def index(request):
+    """
+    Vue pour la page d'accueil
+
+    Args:
+        request (HttpRequest): Objet représentant la requête HTTP
+
+    Returns:
+        Render de la page HTML de l'accueil
+    """
     return render(request, 'index.html')
