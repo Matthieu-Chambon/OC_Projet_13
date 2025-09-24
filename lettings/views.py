@@ -1,5 +1,11 @@
 from django.shortcuts import render
 from lettings.models import Letting
+from django.http import Http404
+import sentry_sdk
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 # Aenean leo magna, vestibulum et tincidunt fermentum, consectetur quis velit. Sed non placerat
@@ -15,7 +21,15 @@ def index(request):
     Returns:
         Render de la page HTML avec la liste des locations
     """
-    lettings_list = Letting.objects.all()
+    try:
+        logger.info("Récupération des locations depuis la base de données")
+        lettings_list = Letting.objects.all()
+
+    except Exception as e:
+        logger.exception("Erreur lors de la récupération des locations : %s", e)
+        sentry_sdk.capture_exception(e)
+        lettings_list = []
+
     context = {'lettings_list': lettings_list}
     return render(request, 'lettings/index.html', context)
 
@@ -24,7 +38,7 @@ def index(request):
 # eleifend. Praesent dignissim, odio eu consequat pretium, purus urna vulputate arcu, vitae
 # efficitur lacus justo nec purus. Aenean finibus faucibus lectus at porta. Maecenas auctor, est
 # ut luctus congue, dui enim mattis enim, ac condimentum velit libero in magna. Suspendisse
-# potenti. In tempus a nisi sed laoreet. Suspendisse porta dui eget sem accumsan interdum. Ut quis
+# potenti. In tempus a nisi sed l.aoreet. Suspendisse porta dui eget sem accumsan interdum. Ut quis
 # urna pellentesque justo mattis ullamcorper ac non tellus. In tristique mauris eu velit fermentum,
 # tempus pharetra est luctus. Vivamus consequat aliquam libero, eget bibendum lorem. Sed non dolor
 # risus. Mauris condimentum auctor elementum. Donec quis nisi ligula. Integer vehicula tincidunt
@@ -40,7 +54,19 @@ def letting(request, letting_id):
     Returns:
         Render de la page HTML avec les détails de la location
     """
-    letting = Letting.objects.get(id=letting_id)
+    try:
+        logger.info("Récupération de la location avec ID %d depuis la base de données", letting_id)
+        letting = Letting.objects.get(id=letting_id)
+
+    except Letting.DoesNotExist:
+        logger.warning("Location avec ID %d non trouvée", letting_id)
+        raise Http404("Location introuvable")
+
+    except Exception as e:
+        logger.exception("Erreur inattendue dans la vue letting : %s", e)
+        sentry_sdk.capture_exception(e)
+        return render(request, "500.html", status=500)
+
     context = {
         'title': letting.title,
         'address': letting.address,

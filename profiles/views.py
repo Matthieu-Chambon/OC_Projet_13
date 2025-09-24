@@ -1,5 +1,11 @@
 from django.shortcuts import render
 from profiles.models import Profile
+from django.http import Http404
+import sentry_sdk
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 # Sed placerat quam in pulvinar commodo. Nullam laoreet consectetur ex, sed consequat libero
@@ -15,7 +21,15 @@ def index(request):
     Returns:
         Render de la page HTML avec la liste des profils
     """
-    profiles_list = Profile.objects.all()
+    try:
+        logger.info("Récupération des profils depuis la base de données")
+        profiles_list = Profile.objects.all()
+
+    except Exception as e:
+        logger.exception("Erreur lors de la récupération des profils : %s", e)
+        sentry_sdk.capture_exception(e)
+        profiles_list = []
+
     context = {'profiles_list': profiles_list}
     return render(request, 'profiles/index.html', context)
 
@@ -35,6 +49,21 @@ def profile(request, username):
     Returns:
         Render de la page HTML avec les détails du profil
     """
-    profile = Profile.objects.get(user__username=username)
+    try:
+        logger.info(
+            "Récupération du profil pour l'utilisateur '%s' depuis la base de données",
+            username
+        )
+        profile = Profile.objects.get(user__username=username)
+
+    except Profile.DoesNotExist:
+        logger.warning("Profil avec nom d'utilisateur '%s' non trouvé", username)
+        raise Http404("Profil introuvable")
+
+    except Exception as e:
+        logger.exception("Erreur inattendue dans la vue profile : %s", e)
+        sentry_sdk.capture_exception(e)
+        return render(request, "500.html", status=500)
+
     context = {'profile': profile}
     return render(request, 'profiles/profile.html', context)
