@@ -5,6 +5,7 @@ from . import views
 from lettings import views as lettings_views
 from profiles import views as profiles_views
 
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('lettings/', lettings_views.index, name='lettings_index'),
