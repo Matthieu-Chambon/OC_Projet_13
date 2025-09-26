@@ -48,8 +48,8 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: "3.12.4"
-      - name: Install linters
+      - name: Install linter
         run: |
-          pip install flake8 black
+          pip install flake8
       - name: Run flake8
         run: flake8 .
