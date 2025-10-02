@@ -56,21 +56,19 @@ jobs:
     needs: [test, quality]
     permissions:
       contents: read
-      packages: write
     steps:
       - uses: actions/checkout@v4
   
-      - name: Log in to GitHub Container Registry
+      - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-  
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/matthieu-chambon/oc_projet_13/django-app:latest .
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/oc-project-13:latest .
   
       - name: Push Docker image
         run: |
-          docker push ghcr.io/matthieu-chambon/oc_projet_13/django-app:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/oc-project-13:latest
