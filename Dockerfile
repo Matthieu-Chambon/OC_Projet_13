@@ -14,6 +14,9 @@ RUN pip install -r requirements.txt
 # Copie tout le projet dans le conteneur
 COPY . .
 
+# Collecte les fichiers statiques pour la prod
+RUN python manage.py collectstatic --noinput
+
 # Expose le port sur lequel Django tournera
 EXPOSE 8000
 
