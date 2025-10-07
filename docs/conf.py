@@ -26,4 +26,4 @@ source_suffix = {
 master_doc = "index"
 
 # --- Thème ---
-html_theme = "sphinx_rtd_theme"
+html_theme = "alabaster"
