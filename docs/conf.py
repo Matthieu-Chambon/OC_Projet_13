@@ -1,3 +1,6 @@
+import os
+import sys
+
 # --- Informations sur le projet ---
 project = "OC Projet 13"
 author = "Matthieu Chambon"
