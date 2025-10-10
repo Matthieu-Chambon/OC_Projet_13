@@ -5,8 +5,9 @@ Bienvenue dans la documentation de OC Lettings !
    :maxdepth: 2
    :caption: Sommaire
 
-   introduction
+   home
    installation
+   user_guide
    architecture
-   ci_cd
-   deploiement
+   tests_and_logging.md
+   cicd_deploy.md

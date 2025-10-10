@@ -5,5 +5,3 @@ venv
 htmlcov/
 flake-report/
 staticfiles/
-.readthedocs.yaml
-docs/

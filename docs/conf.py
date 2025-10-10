@@ -14,6 +14,7 @@ sys.path.insert(0, os.path.abspath(".."))
 extensions = [
     "sphinx.ext.autodoc",      # Génération auto de doc à partir du code Python
     "sphinx.ext.viewcode",     # Liens vers le code source
+    "myst_parser",             # Markdown
 ]
 
 # --- Fichiers sources ---
@@ -26,4 +27,4 @@ source_suffix = {
 master_doc = "index"
 
 # --- Thème ---
-html_theme = "alabaster"
+html_theme = 'furo'
