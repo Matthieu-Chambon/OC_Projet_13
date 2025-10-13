@@ -1,77 +1,106 @@
-## Résumé
+# Projet 13 - Mettez à l'échelle une application Django en utilisant une architecture modulaire
 
-Site web d'Orange County Lettings
+## 📚 Description
 
-## Développement local
+Ce projet **OC Lettings** a pour objectif de moderniser et automatiser le déploiement d’une application Django via une architecture modulaire basée sur Docker et GitHub Actions.
 
-### Prérequis
+Fonctionnalités principales :
+- Gestion d’annonces de **locations immobilières**
+- Application **Django** conteneurisée avec **Docker**
+- Tests automatisés et **vérification de la qualité du code**
+- **Pipeline CI/CD** complète via **GitHub Actions**
+- **Déploiement automatique** sur **Render**
+- Suivi des erreurs et logs via **Sentry**
 
-- Compte GitHub avec accès en lecture à ce repository
-- Git CLI
-- SQLite3 CLI
-- Interpréteur Python, version 3.6 ou supérieure
+## 📥 Installation et exécution
 
-Dans le reste de la documentation sur le développement local, il est supposé que la commande `python` de votre OS shell exécute l'interpréteur Python ci-dessus (à moins qu'un environnement virtuel ne soit activé).
+```bash
+git clone https://github.com/matthieu-chambon/oc_projet_13.git
+cd oc_projet_13
+```
 
-### macOS / Linux
+### 2. Créer l’environnement virtuel
 
-#### Cloner le repository
+```bash
+python -m venv venv
+source venv/bin/activate  # macOS / Linux
+venv\Scripts\activate     # Windows
+```
 
-- `cd /path/to/put/project/in`
-- `git clone https://github.com/OpenClassrooms-Student-Center/Python-OC-Lettings-FR.git`
+### 3. Installer les dépendances
 
-#### Créer l'environnement virtuel
+```bash
+pip install -r requirements.txt
+```
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- `python -m venv venv`
-- `apt-get install python3-venv` (Si l'étape précédente comporte des erreurs avec un paquet non trouvé sur Ubuntu)
-- Activer l'environnement `source venv/bin/activate`
-- Confirmer que la commande `python` exécute l'interpréteur Python dans l'environnement virtuel
-`which python`
-- Confirmer que la version de l'interpréteur Python est la version 3.6 ou supérieure `python --version`
-- Confirmer que la commande `pip` exécute l'exécutable pip dans l'environnement virtuel, `which pip`
-- Pour désactiver l'environnement, `deactivate`
+### 4. Lancer le serveur local
 
-#### Exécuter le site
+```bash
+python manage.py runserver
+```
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- `source venv/bin/activate`
-- `pip install --requirement requirements.txt`
-- `python manage.py runserver`
-- Aller sur `http://localhost:8000` dans un navigateur.
-- Confirmer que le site fonctionne et qu'il est possible de naviguer (vous devriez voir plusieurs profils et locations).
+L’application est maintenant accessible à [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
 
-#### Linting
+## 🐳 Exécution avec Docker
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- `source venv/bin/activate`
-- `flake8`
+```bash
+docker build -t oc_projet_13 .
+docker run -d -p 8000:8000 oc_projet_13
+```
 
-#### Tests unitaires
+## 🔑 Accès au panneau d’administration
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- `source venv/bin/activate`
-- `pytest`
+Une fois l’application en cours d’exécution, vous pouvez accéder à l’interface d’administration Django : [http://localhost:8000/admin](http://localhost:8000/admin)
 
-#### Base de données
+### Identifiants par défaut
+- **Utilisateur :** `admin`  
+- **Mot de passe :** `Abc1234!`
 
-- `cd /path/to/Python-OC-Lettings-FR`
-- Ouvrir une session shell `sqlite3`
-- Se connecter à la base de données `.open oc-lettings-site.sqlite3`
-- Afficher les tables dans la base de données `.tables`
-- Afficher les colonnes dans le tableau des profils, `pragma table_info(Python-OC-Lettings-FR_profile);`
-- Lancer une requête sur la table des profils, `select user_id, favorite_city from
-  Python-OC-Lettings-FR_profile where favorite_city like 'B%';`
-- `.quit` pour quitter
+Depuis cette interface, il est possible de :
+  - Ajouter ou modifier une **location** (`Letting`)
+  - Gérer les **adresses** associées (`Address`)
+  - Administrer les **profils utilisateurs** (`Profile`)
 
-#### Panel d'administration
+## 🔁 CI/CD & Déploiement
 
-- Aller sur `http://localhost:8000/admin`
-- Connectez-vous avec l'utilisateur `admin`, mot de passe `Abc1234!`
+Le pipeline CI/CD (GitHub Actions) automatise les étapes suivantes :
 
-### Windows
+1. Installation de **Python** et des **dépendances**
+2. Exécution des **tests** et du **linter** (Flake8)
+3. Construction et publication de l’image Docker sur **Docker Hub**
+4. Déclenchement du déploiement automatique sur **Render**
 
-Utilisation de PowerShell, comme ci-dessus sauf :
+> ⚠️ Le déploiement Render ne s’exécute que sur la branche `master`.
 
-- Pour activer l'environnement virtuel, `.\venv\Scripts\Activate.ps1` 
-- Remplacer `which <my-command>` par `(Get-Command <my-command>).Path`
+### 🔐 Secrets GitHub utilisés
+
+| Nom du secret        | Description                                      |
+| -------------------- | ------------------------------------------------ |
+| `DOCKERHUB_USERNAME` | Nom d’utilisateur Docker Hub                     |
+| `DOCKERHUB_TOKEN`    | Token d’accès Docker Hub                         |
+| `RENDER_DEPLOY_HOOK` | URL du webhook Render déclenchant le déploiement |
+
+## 🛠️ Technologies principales
+
+- [Python 3.12](https://www.python.org/)
+- [Django 3.0](https://docs.djangoproject.com/en/3.0/)
+- [Docker](https://docs.docker.com/)
+- [GitHub Actions](https://docs.github.com/en/actions)
+- [Render](https://render.com/docs)
+- [Sentry](https://docs.sentry.io/)
+- [Read the Docs](https://readthedocs.org/)
+- [pytest](https://docs.pytest.org/)
+
+## 📖 Documentation complète
+
+Une documentation technique complète est disponible sur **Read the Docs** :
+ [https://oc-projet-13.readthedocs.io/](https://oc-projet-13.readthedocs.io/)
+
+Elle détaille :
+
+- la structure du projet
+- les modèles de données
+- le pipeline CI/CD
+- les tests de couverture de code et de qualité
+- la configuration de Sentry
+- les étapes de déploiement
