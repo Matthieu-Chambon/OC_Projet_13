@@ -33,7 +33,23 @@ venv\Scripts\activate     # Windows
 pip install -r requirements.txt
 ```
 
-### 4. Lancer le serveur local
+### 4. (Optionnel) Collecter les fichiers statiques
+
+Si votre fichier `.env` contient la ligne suivante :
+
+```
+DJANGO_DEBUG=False
+```
+
+vous devez exécuter cette commande avant de lancer le serveur :
+
+```console
+python manage.py collectstatic --noinput
+```
+
+Cela permet à Django de regrouper tous les fichiers statiques (CSS, JS, images) dans un dossier unique afin qu’ils soient servis correctement en mode production.
+
+### 5. Lancer le serveur local
 
 ```bash
 python manage.py runserver
